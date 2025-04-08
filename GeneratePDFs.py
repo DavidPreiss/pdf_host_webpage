@@ -15,3 +15,4 @@ with open(pageName, "w") as file:
     file.write(html_content)
 
 print(f"{pageName} has been generated.")
+
