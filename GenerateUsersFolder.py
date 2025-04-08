@@ -30,7 +30,7 @@ except ImportError as e:
     print("Installation complete. You can now run the script.")
     # exit()
 MAX_WEEKS = 52
-DUMP_FOLDER_PATH = "C:/Users/David/Desktop/code/BNRPools/print_populated_pools/Dump Folder"
+DUMP_FOLDER_PATH = "../BNRPools/print_populated_pools/Dump Folder"
 CUSTOMERS_POOLS_XLSX = "Book1.xlsx"
 C_ID_COL = 2
 C_ID_START_ROW = 2
