@@ -1,3 +1,4 @@
+# Created by David N Preiss
 
 # Create Customers Folder
 
@@ -19,8 +20,25 @@
         # add a link to the CustomerID.html that leads to PoolID.html
     # save CustomerID.html
 # close CustomersPools excel document
+
+## Import Statements
 import os
 import subprocess
+# System call
+os.system("")
+
+# Class of different styles
+class style():
+    BLACK = '\033[30m'
+    RED = '\033[31m'
+    GREEN = '\033[32m'
+    YELLOW = '\033[33m'
+    BLUE = '\033[34m'
+    MAGENTA = '\033[35m'
+    CYAN = '\033[36m'
+    WHITE = '\033[37m'
+    UNDERLINE = '\033[4m'
+    RESET = '\033[0m'
 
 try:
     import openpyxl
@@ -29,8 +47,12 @@ except ImportError as e:
     subprocess.check_call(["pip", "install", "openpyxl"])
     print("Installation complete. You can now run the script.")
     # exit()
+
+## GLOBAL VALUES
+
 MAX_WEEKS = 52
 DUMP_FOLDER_PATH = "../BNRPools/print_populated_pools/Dump Folder"
+output_dir = "./Customers"
 CUSTOMERS_POOLS_XLSX = "Book1.xlsx"
 C_ID_COL = 2
 C_ID_START_ROW = 2
@@ -38,9 +60,14 @@ C_ID_END_ROW = 1000
 P_ID_START_COL = 3
 P_ID_END_COL = 1000
 
+## CODE START
 
 workbook = openpyxl.load_workbook(CUSTOMERS_POOLS_XLSX)
 worksheet = workbook.active
+
+
+# Create Customers Folder
+os.makedirs(output_dir, exist_ok=True)
 
 for row in range(C_ID_START_ROW, C_ID_END_ROW):
     CustomerID = worksheet.cell(row=row, column=C_ID_COL).value
@@ -95,3 +122,6 @@ for row in range(C_ID_START_ROW, C_ID_END_ROW):
 
 # close CustomersPools excel document
 workbook.close()
+
+# Prompt the user to press Enter before closing
+input("Press Enter to close...")
