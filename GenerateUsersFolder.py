@@ -71,8 +71,9 @@ worksheet = workbook.active
 
 # Create Customers Folder
 output_dir = "./Customers"
-os.makedirs(output_dir, exist_ok=True)
-print(f"Created output_dir:{output_dir}")
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir, exist_ok=True)
+    print(f"Created output_dir:{output_dir}")
 
 
 # iterate through the CustomerID column in the xlsx
@@ -83,10 +84,10 @@ for row in range(C_ID_START_ROW, C_ID_END_ROW):
     print(f"\n CustomerID: {CustomerID}")
     # for each CustomerID
     # create a CustomerID folder in the Customers folder
-    cidFolder = "./Customers/"+CustomerID
+    cidFolder = output_dir + "/"+CustomerID
     if not os.path.exists(cidFolder):
         os.makedirs(cidFolder, exist_ok=True)
-        print(f"Created cidFolder:{cidFolder}")
+        print(f" Created cidFolder:{cidFolder}")
     #TODO create a CustomerID.html file in that CustomerID folder
     
     # iterate through the row of the CustomerID in the xlsx
