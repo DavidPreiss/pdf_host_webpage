@@ -22,6 +22,8 @@
 # close CustomersPools excel document
 
 ## Import Statements
+
+import shutil
 import os
 import subprocess
 # System call
@@ -82,8 +84,9 @@ for row in range(C_ID_START_ROW, C_ID_END_ROW):
     # for each CustomerID
     # create a CustomerID folder in the Customers folder
     cidFolder = "./Customers/"+CustomerID
-    os.makedirs(cidFolder, exist_ok=True)
-    print(f"Created cidFolder:{cidFolder}")
+    if not os.path.exists(cidFolder):
+        os.makedirs(cidFolder, exist_ok=True)
+        print(f"Created cidFolder:{cidFolder}")
     # create a CustomerID.html file in that CustomerID folder
     
     # iterate through the row of the CustomerID in the xlsx
@@ -95,8 +98,9 @@ for row in range(C_ID_START_ROW, C_ID_END_ROW):
         # for each PoolID
         # create a PoolID folder in the CustomerID folder
         pidFolder = cidFolder+"/"+PoolID
-        os.makedirs(pidFolder, exist_ok=True)
-        print(f"Created pidFolder:{pidFolder}")
+        if not os.path.exists(pidFolder):
+            os.makedirs(pidFolder, exist_ok=True)
+            print(f"Created pidFolder:{pidFolder}")
         
         # create a PoolID.html file in that PoolID folder
         # iterate through the PoolID folder in the dumpfile
@@ -107,9 +111,12 @@ for row in range(C_ID_START_ROW, C_ID_END_ROW):
                 print(f"\t{os.path.basename(fnames[file])}")
                 # import and rename the pdf into the PoolID folder
                 # add a link to the PoolID.html that opens PoolDate.pdf
-            except Exception as e:
-                # print(f"done")
+            except IndexError as e:
+                # print(f"{e}") # debug
                 break
+            except Exception as e:
+                print(style.RED + f"!--ERROR:{e}" + style.RESET)
+            break
         # save PoolID.html
         # add a link to the CustomerID.html that leads to PoolID.html
     # save CustomerID.html
