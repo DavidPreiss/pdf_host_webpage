@@ -87,7 +87,7 @@ for row in range(C_ID_START_ROW, C_ID_END_ROW):
     if not os.path.exists(cidFolder):
         os.makedirs(cidFolder, exist_ok=True)
         print(f"Created cidFolder:{cidFolder}")
-    # create a CustomerID.html file in that CustomerID folder
+    #TODO create a CustomerID.html file in that CustomerID folder
     
     # iterate through the row of the CustomerID in the xlsx
     for col in range(P_ID_START_COL, P_ID_END_COL):
@@ -100,26 +100,45 @@ for row in range(C_ID_START_ROW, C_ID_END_ROW):
         pidFolder = cidFolder+"/"+PoolID
         if not os.path.exists(pidFolder):
             os.makedirs(pidFolder, exist_ok=True)
-            print(f"Created pidFolder:{pidFolder}")
+            print(f"   Created pidFolder:{pidFolder}")
         
-        # create a PoolID.html file in that PoolID folder
+        #TODO create a PoolID.html file in that PoolID folder
+        
         # iterate through the PoolID folder in the dumpfile
-        myPath = DUMP_FOLDER_PATH+"/"+str(PoolID)
-        fnames = os.listdir(myPath)
+        Dump_Pool_ID_path = DUMP_FOLDER_PATH+"/"+str(PoolID)
+        fnames = os.listdir(Dump_Pool_ID_path)
         for file in range(0,MAX_WEEKS):
             try:
-                print(f"\t{os.path.basename(fnames[file])}")
-                # import and rename the pdf into the PoolID folder
-                # add a link to the PoolID.html that opens PoolDate.pdf
+                fileName = os.path.basename(fnames[file])
+                # print(f"\t{fileName}") #debug
+                #TODO import and rename the pdf into the PoolID folder
+                # Source path
+                src_path = Dump_Pool_ID_path + "/" + fileName
+
+                # Destination path
+                dest_path = pidFolder+ "/" + fileName
+                
+                # Copy the file
+                try:
+                    # print(f"\t Copying from\t {src_path}\n\t to\t {dest_path}") # debug
+                    shutil.copy2(src_path, dest_path)
+                    print(f"\t Copy Success: {fileName}") # debug
+                except Exception as e:
+                    print(f"\t Copy Failed!:{e}")
+                
+                #TODO add a link to the PoolID.html that opens PoolDate.pdf
+                
             except IndexError as e:
                 # print(f"{e}") # debug
                 break
             except Exception as e:
                 print(style.RED + f"!--ERROR:{e}" + style.RESET)
-            break
-        # save PoolID.html
-        # add a link to the CustomerID.html that leads to PoolID.html
-    # save CustomerID.html
+                break
+        #TODO save PoolID.html
+        
+        #TODO add a link to the CustomerID.html that leads to PoolID.html
+        
+    #TODO save CustomerID.html
     
 
 
