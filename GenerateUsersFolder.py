@@ -52,7 +52,6 @@ except ImportError as e:
 
 MAX_WEEKS = 52
 DUMP_FOLDER_PATH = "../BNRPools/print_populated_pools/Dump Folder"
-output_dir = "./Customers"
 CUSTOMERS_POOLS_XLSX = "Book1.xlsx"
 C_ID_COL = 2
 C_ID_START_ROW = 2
@@ -62,13 +61,19 @@ P_ID_END_COL = 1000
 
 ## CODE START
 
+
+# Open CustomersPools excel document
 workbook = openpyxl.load_workbook(CUSTOMERS_POOLS_XLSX)
 worksheet = workbook.active
 
 
 # Create Customers Folder
+output_dir = "./Customers"
 os.makedirs(output_dir, exist_ok=True)
+print(f"Created output_dir:{output_dir}")
 
+
+# iterate through the CustomerID column in the xlsx
 for row in range(C_ID_START_ROW, C_ID_END_ROW):
     CustomerID = worksheet.cell(row=row, column=C_ID_COL).value
     if CustomerID is None:
@@ -76,6 +81,9 @@ for row in range(C_ID_START_ROW, C_ID_END_ROW):
     print(f"\n CustomerID: {CustomerID}")
     # for each CustomerID
     # create a CustomerID folder in the Customers folder
+    cidFolder = "./Customers/"+CustomerID
+    os.makedirs(cidFolder, exist_ok=True)
+    print(f"Created cidFolder:{cidFolder}")
     # create a CustomerID.html file in that CustomerID folder
     
     # iterate through the row of the CustomerID in the xlsx
@@ -86,6 +94,10 @@ for row in range(C_ID_START_ROW, C_ID_END_ROW):
         print(f"   PoolID: {PoolID}")
         # for each PoolID
         # create a PoolID folder in the CustomerID folder
+        pidFolder = cidFolder+"/"+PoolID
+        os.makedirs(pidFolder, exist_ok=True)
+        print(f"Created pidFolder:{pidFolder}")
+        
         # create a PoolID.html file in that PoolID folder
         # iterate through the PoolID folder in the dumpfile
         myPath = DUMP_FOLDER_PATH+"/"+str(PoolID)
