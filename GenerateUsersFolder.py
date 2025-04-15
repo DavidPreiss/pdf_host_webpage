@@ -71,10 +71,11 @@ worksheet = workbook.active
 
 # Create Customers Folder
 output_dir = "./Customers"
-if not os.path.exists(output_dir):
-    os.makedirs(output_dir, exist_ok=True)
-    print(f"Created output_dir:{output_dir}")
-output_dir = os.path.abspath(output_dir)
+if os.path.exists(output_dir):
+    shutil.rmtree(output_dir)
+os.makedirs(output_dir, exist_ok=True)
+# print(f"Created output_dir:{output_dir}") # debug
+# output_dir = os.path.abspath(output_dir) # debug
 
 # iterate through the CustomerID column in the xlsx
 for row in range(C_ID_START_ROW, C_ID_END_ROW):
@@ -85,9 +86,8 @@ for row in range(C_ID_START_ROW, C_ID_END_ROW):
     # for each CustomerID
     # create a CustomerID folder in the Customers folder
     cidFolder = output_dir + "/"+CustomerID
-    if not os.path.exists(cidFolder):
-        os.makedirs(cidFolder, exist_ok=True)
-        print(f" Created cidFolder:{cidFolder}")
+    os.makedirs(cidFolder, exist_ok=True)
+    # print(f" Created cidFolder:{cidFolder}") # debug
     
     # create a CustomerID.html file in that CustomerID folder
     cid_html_name = CustomerID+".html"
@@ -102,9 +102,8 @@ for row in range(C_ID_START_ROW, C_ID_END_ROW):
         # for each PoolID
         # create a PoolID folder in the CustomerID folder
         pidFolder = cidFolder+"/"+PoolID
-        if not os.path.exists(pidFolder):
-            os.makedirs(pidFolder, exist_ok=True)
-            print(f"   Created pidFolder:{pidFolder}")
+        os.makedirs(pidFolder, exist_ok=True)
+        # print(f"\t Created pidFolder:{pidFolder}") # debug
         
         # create a PoolID.html file in that PoolID folder
         pid_html_name = PoolID+".html"
@@ -129,7 +128,7 @@ for row in range(C_ID_START_ROW, C_ID_END_ROW):
                 try:
                     # print(f"\t Copying from\t {src_path}\n\t to\t {dest_path}") # debug
                     shutil.copy2(src_path, dest_path)
-                    print(f"\t Copy Success: {fileName}") # debug
+                    # print(f"\t Copy Success: {fileName}") # debug
                 except Exception as e:
                     print(f"\t Copy Failed!:{e}")
                 
@@ -142,12 +141,13 @@ for row in range(C_ID_START_ROW, C_ID_END_ROW):
             except Exception as e:
                 print(style.RED + f"!--ERROR:{e}" + style.RESET)
                 break
+        print(f"\t {file} pdfs transferred")
         
         # save PoolID.html
         pid_html_content += "</ul>\n</body>\n</html>"
         with open(pid_html_path, "w") as file:
             file.write(pid_html_content)
-        print(f"{pid_html_name} has been generated.")
+        # print(f"\t {pid_html_name} has been generated.") # debug
         
         # add a link to the CustomerID.html that leads to PoolID.html
         cid_html_content += f'    <li><a target="right" href="{PoolID}/{pid_html_name}">{PoolID}</a></li>\n'
@@ -156,7 +156,7 @@ for row in range(C_ID_START_ROW, C_ID_END_ROW):
     cid_html_content += "</ul>\n</body>\n</html>"
     with open(cid_html_path, "w") as file:
         file.write(cid_html_content)
-    print(f"{cid_html_name} has been generated.")
+    # print(f" {cid_html_name} has been generated.") # debug
 
 
 # iterate through the CustomerID column in the xlsx
@@ -179,4 +179,4 @@ for row in range(C_ID_START_ROW, C_ID_END_ROW):
 workbook.close()
 
 # Prompt the user to press Enter before closing
-input("Press Enter to close...")
+input(style.GREEN + "\n\t\t Press Enter to close..." + style.RESET)
