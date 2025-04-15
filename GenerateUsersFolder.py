@@ -1,4 +1,4 @@
-# Created by David N Preiss
+### Created by David N Preiss
 
 # Create Customers Folder
 
@@ -74,7 +74,7 @@ output_dir = "./Customers"
 if not os.path.exists(output_dir):
     os.makedirs(output_dir, exist_ok=True)
     print(f"Created output_dir:{output_dir}")
-
+output_dir = os.path.abspath(output_dir)
 
 # iterate through the CustomerID column in the xlsx
 for row in range(C_ID_START_ROW, C_ID_END_ROW):
@@ -88,8 +88,11 @@ for row in range(C_ID_START_ROW, C_ID_END_ROW):
     if not os.path.exists(cidFolder):
         os.makedirs(cidFolder, exist_ok=True)
         print(f" Created cidFolder:{cidFolder}")
-    #TODO create a CustomerID.html file in that CustomerID folder
     
+    # create a CustomerID.html file in that CustomerID folder
+    cid_html_name = CustomerID+".html"
+    cid_html_path = cidFolder + "/" + cid_html_name
+    cid_html_content= f"<!DOCTYPE html>\n<html>\n<head>\n<title>{CustomerID}</title>\n</head>\n<body>\n<h2>{CustomerID}</h2>\n<ul>\n"
     # iterate through the row of the CustomerID in the xlsx
     for col in range(P_ID_START_COL, P_ID_END_COL):
         PoolID = worksheet.cell(row=row, column=col).value
@@ -103,7 +106,10 @@ for row in range(C_ID_START_ROW, C_ID_END_ROW):
             os.makedirs(pidFolder, exist_ok=True)
             print(f"   Created pidFolder:{pidFolder}")
         
-        #TODO create a PoolID.html file in that PoolID folder
+        # create a PoolID.html file in that PoolID folder
+        pid_html_name = PoolID+".html"
+        pid_html_path = pidFolder + "/" + pid_html_name
+        pid_html_content= f"<!DOCTYPE html>\n<html>\n<head>\n<title>{PoolID}</title>\n</head>\n<body>\n<h2>{PoolID}</h2>\n<ul>\n"
         
         # iterate through the PoolID folder in the dumpfile
         Dump_Pool_ID_path = DUMP_FOLDER_PATH+"/"+str(PoolID)
@@ -112,7 +118,7 @@ for row in range(C_ID_START_ROW, C_ID_END_ROW):
             try:
                 fileName = os.path.basename(fnames[file])
                 # print(f"\t{fileName}") #debug
-                #TODO import and rename the pdf into the PoolID folder
+                # import and rename the pdf into the PoolID folder
                 # Source path
                 src_path = Dump_Pool_ID_path + "/" + fileName
 
@@ -127,7 +133,8 @@ for row in range(C_ID_START_ROW, C_ID_END_ROW):
                 except Exception as e:
                     print(f"\t Copy Failed!:{e}")
                 
-                #TODO add a link to the PoolID.html that opens PoolDate.pdf
+                # add a link to the PoolID.html that opens PoolDate.pdf
+                pid_html_content += f'    <li><a target="_blank" href="{fileName}">{fileName}</a></li>\n'
                 
             except IndexError as e:
                 # print(f"{e}") # debug
@@ -135,12 +142,21 @@ for row in range(C_ID_START_ROW, C_ID_END_ROW):
             except Exception as e:
                 print(style.RED + f"!--ERROR:{e}" + style.RESET)
                 break
-        #TODO save PoolID.html
         
-        #TODO add a link to the CustomerID.html that leads to PoolID.html
+        # save PoolID.html
+        pid_html_content += "</ul>\n</body>\n</html>"
+        with open(pid_html_path, "w") as file:
+            file.write(pid_html_content)
+        print(f"{pid_html_name} has been generated.")
         
-    #TODO save CustomerID.html
-    
+        # add a link to the CustomerID.html that leads to PoolID.html
+        cid_html_content += f'    <li><a target="right" href="{PoolID}/{pid_html_name}">{PoolID}</a></li>\n'
+
+    # save CustomerID.html
+    cid_html_content += "</ul>\n</body>\n</html>"
+    with open(cid_html_path, "w") as file:
+        file.write(cid_html_content)
+    print(f"{cid_html_name} has been generated.")
 
 
 # iterate through the CustomerID column in the xlsx
