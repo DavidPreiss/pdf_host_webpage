@@ -112,7 +112,7 @@ if True:
     # output_dir = os.path.abspath(output_dir) # debug
 
 
-    #TODO Create AllCustomers.html in Customers Folder
+    # Create AllCustomers.html in Customers Folder
     all_cids_html_name = "AllCustomers.html"
     all_cids_html_path = output_dir + "/" + all_cids_html_name
     all_cids_html_content= f"<!DOCTYPE html>\n<html>\n<head>\n<title>All Customers</title>\n</head>\n<body>\n<h2>All Customers</h2>\n<ul>\n"
@@ -201,11 +201,11 @@ if True:
         
         # print(f" {cid_html_name} has been generated.") # debug
         
-        #TODO add a link to AllCustomers.html that leads to CustomerID.html
+        # add a link to AllCustomers.html that leads to CustomerID.html
         all_cids_html_content += f'    <li><a target="bottom" href="{CustomerID}/{cid_html_name}">{CustomerID}</a></li>\n'
 
 
-    #TODO save AllCustomers.html in Customers Folder
+    # save AllCustomers.html in Customers Folder
     all_cids_html_content += "</ul>\n</body>\n</html>"
     with open(all_cids_html_path, "w") as file:
         file.write(all_cids_html_content)
