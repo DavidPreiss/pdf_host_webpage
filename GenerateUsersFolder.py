@@ -1,5 +1,10 @@
 #### Created by David N Preiss
 
+## TO DO:
+# All Customers Page
+# All Pools Page
+# Check Andre email
+
 ### TABLE OF CONTENTS
 """
 # Intro
@@ -108,7 +113,11 @@ if True:
 
 
     #TODO Create AllCustomers.html in Customers Folder
-
+    all_cids_html_name = "AllCustomers.html"
+    all_cids_html_path = output_dir + "/" + all_cids_html_name
+    all_cids_html_content= f"<!DOCTYPE html>\n<html>\n<head>\n<title>All Customers</title>\n</head>\n<body>\n<h2>All Customers</h2>\n<ul>\n"
+    
+    
     # iterate through the CustomerID column in the xlsx
     for row in range(C_ID_START_ROW, C_ID_END_ROW):
         CustomerID = worksheet.cell(row=row, column=C_ID_COL).value
@@ -125,6 +134,7 @@ if True:
         cid_html_name = CustomerID+".html"
         cid_html_path = cidFolder + "/" + cid_html_name
         cid_html_content= f"<!DOCTYPE html>\n<html>\n<head>\n<title>{CustomerID}</title>\n</head>\n<body>\n<h2>{CustomerID}</h2>\n<ul>\n"
+        
         # iterate through the row of the CustomerID in the xlsx
         for col in range(P_ID_START_COL, P_ID_END_COL):
             PoolID = worksheet.cell(row=row, column=col).value
@@ -188,11 +198,17 @@ if True:
         cid_html_content += "</ul>\n</body>\n</html>"
         with open(cid_html_path, "w") as file:
             file.write(cid_html_content)
+        
         # print(f" {cid_html_name} has been generated.") # debug
         
         #TODO add a link to AllCustomers.html that leads to CustomerID.html
+        all_cids_html_content += f'    <li><a target="bottom" href="{CustomerID}/{cid_html_name}">{CustomerID}</a></li>\n'
+
 
     #TODO save AllCustomers.html in Customers Folder
+    all_cids_html_content += "</ul>\n</body>\n</html>"
+    with open(all_cids_html_path, "w") as file:
+        file.write(all_cids_html_content)
 
     # close CustomersPools excel document
     workbook.close()
