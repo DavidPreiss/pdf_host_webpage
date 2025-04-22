@@ -1,4 +1,13 @@
-### Created by David N Preiss
+#### Created by David N Preiss
+
+### TABLE OF CONTENTS
+# Intro
+# Hard-coded Global Values
+# Import Statements
+# Function Definitions
+# Pseudocode
+# Main Code
+# Outro
 
 # Create Customers Folder
 
