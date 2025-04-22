@@ -4,6 +4,8 @@
 
 # Open CustomersPools excel document
 
+#TODO Create AllCustomers.html in Customers Folder
+
 # iterate through the CustomerID column in the xlsx
 # for each CustomerID
     # create a CustomerID folder in the Customers folder
@@ -19,6 +21,9 @@
             # save PoolID.html
         # add a link to the CustomerID.html that leads to PoolID.html
     # save CustomerID.html
+    #TODO add a link to AllCustomers.html that leads to CustomerID.html
+
+#TODO save AllCustomers.html in Customers Folder
 # close CustomersPools excel document
 
 ## Import Statements
@@ -76,6 +81,9 @@ if os.path.exists(output_dir):
 os.makedirs(output_dir, exist_ok=True)
 # print(f"Created output_dir:{output_dir}") # debug
 # output_dir = os.path.abspath(output_dir) # debug
+
+
+#TODO Create AllCustomers.html in Customers Folder
 
 # iterate through the CustomerID column in the xlsx
 for row in range(C_ID_START_ROW, C_ID_END_ROW):
@@ -157,23 +165,10 @@ for row in range(C_ID_START_ROW, C_ID_END_ROW):
     with open(cid_html_path, "w") as file:
         file.write(cid_html_content)
     # print(f" {cid_html_name} has been generated.") # debug
+    
+    #TODO add a link to AllCustomers.html that leads to CustomerID.html
 
-
-# iterate through the CustomerID column in the xlsx
-# for each CustomerID
-    # create a CustomerID folder in the Customers folder
-    # create a CustomerID.html file in that CustomerID folder
-    # iterate through the row of the CustomerID in the xlsx
-    # for each PoolID
-        # create a PoolID folder in the CustomerID folder
-        # inside the PoolID folder
-            # create a PoolID.html file
-            # for each of the last 52 pdfs of PoolID
-                # import and rename the pdf into the PoolID folder
-                # add a link to the PoolID.html that opens PoolDate.pdf
-            # save PoolID.html
-        # add a link to the CustomerID.html that leads to PoolID.html
-    # save CustomerID.html
+#TODO save AllCustomers.html in Customers Folder
 
 # close CustomersPools excel document
 workbook.close()
