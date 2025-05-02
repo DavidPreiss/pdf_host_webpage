@@ -5,7 +5,7 @@
 # open pool.xlsx file
 # iterate through the rows of pool.xlsx
 # for each row1
-	# if col E is blank
+	# if col E is blankg
 		# create a new line in template
 		# far left cell is F contents
 		# below it is A contents
