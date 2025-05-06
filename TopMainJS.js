@@ -5,7 +5,7 @@ function dispName()
 {
     firstname = document.getElementById("userInput").value;
 	//const newURL = "./Users/User"+firstname+"/User"+firstname+".html";
-	const newURL = "./Customers/C"+firstname+"/C"+firstname+".html";
+	const newURL = "./Customers/"+firstname+"/"+firstname+".html";
     document.getElementById("nameshower").innerHTML=newURL;
 	
 	const mylink = document.getElementById("namelink");
