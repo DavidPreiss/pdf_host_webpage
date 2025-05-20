@@ -64,35 +64,35 @@ if True:
     C_ID_END_ROW = 1000
     P_ID_START_COL = 2
     P_ID_END_COL = 1000
-
+    
 ### Pseudocode
-    """
-    # Create Customers Folder
+"""
+# Create Customers Folder
 
-    # Open CustomersPools excel document
+# Open CustomersPools excel document
 
-    #TODO Create AllCustomers.html in Customers Folder
+#TODO Create AllCustomers.html in Customers Folder
 
-    # iterate through the CustomerID column in the xlsx
-    # for each CustomerID
-        # create a CustomerID folder in the Customers folder
-        # create a CustomerID.html file in that CustomerID folder
-        # iterate through the row of the CustomerID in the xlsx
-        # for each PoolID
-            # create a PoolID folder in the CustomerID folder
-            # inside the PoolID folder
-                # create a PoolID.html file
-                # for each of the last 52 pdfs of PoolID
-                    # import and rename the pdf into the PoolID folder
-                    # add a link to the PoolID.html that opens PoolDate.pdf
-                # save PoolID.html
-            # add a link to the CustomerID.html that leads to PoolID.html
-        # save CustomerID.html
-        #TODO add a link to AllCustomers.html that leads to CustomerID.html
+# iterate through the CustomerID column in the xlsx
+# for each CustomerID
+    # create a CustomerID folder in the Customers folder
+    # create a CustomerID.html file in that CustomerID folder
+    # iterate through the row of the CustomerID in the xlsx
+    # for each PoolID
+        # create a PoolID folder in the CustomerID folder
+        # inside the PoolID folder
+            # create a PoolID.html file
+            # for each of the last 52 pdfs of PoolID
+                # import and rename the pdf into the PoolID folder
+                # add a link to the PoolID.html that opens PoolDate.pdf
+            # save PoolID.html
+        # add a link to the CustomerID.html that leads to PoolID.html
+    # save CustomerID.html
+    #TODO add a link to AllCustomers.html that leads to CustomerID.html
 
-    #TODO save AllCustomers.html in Customers Folder
-    # close CustomersPools excel document
-    """
+#TODO save AllCustomers.html in Customers Folder
+# close CustomersPools excel document
+"""
 
 ### Main Code
 if True:
@@ -116,26 +116,48 @@ if True:
     all_cids_html_path = output_dir + "/" + all_cids_html_name
     all_cids_html_content= f"<!DOCTYPE html>\n<html>\n<head>\n<title>All Customers</title>\n</head>\n<body>\n<h2>All Customers</h2>\n<ul>\n"
     
-    
+    ##est Array of T_IDs
+    ArrayT_ID = []
+    ##est array of arrays of arrays of subT_ID, T_name
+    tripleArray = []
     # iterate through the CustomerID column in the xlsx
     for count in range(C_ID_START_ROW, C_ID_END_ROW):
         row = 2*count+1
         CustomerID = worksheet.cell(row=row, column=C_ID_COL).value
         if CustomerID is None:
-            break
+            break #reached the end of CustomerIDs
         CustomerID = CustomerID.strip()
         CustomerName = worksheet.cell(row=row+1, column=C_ID_COL).value
-        print(f"\n CustomerID: {CustomerID}")
-        print(f"\n CustomerName: {CustomerName}")
-        # for each CustomerID
+        #print(f"\n CustomerID: {CustomerID}")
+        #print(f"\n CustomerName: {CustomerName}")
+        extraString = ""
+        
+        ##if CustomerID starts with T
+            ##check if Array of T_IDs contains CustomerID
+                ##if not, add new T_ID to T_ID array and triple array
+            ##add numbered T_ID to triple array
+        tString = ""
+        if CustomerID[0]=='T':
+            print(f"Customer starts w 'T': {CustomerID}")
+            if CustomerID not in ArrayT_ID:
+                ArrayT_ID.append(CustomerID)
+                tempArray = []
+                tripleArray.append(tempArray)
+                cidFolder = output_dir + "/"+CustomerID
+                os.makedirs(cidFolder, exist_ok=True)
+                all_cids_html_content += f'    <li><a target="bottom" href="{CustomerID}/{CustomerID}.html">{CustomerID}</a> Branch Page</li>\n'
+            tripleArray[ArrayT_ID.index(CustomerID)].append(CustomerName)
+            extraString = "_1"
+            tString = f'<a target="bottom" href="../{CustomerID}/{CustomerID}.html">{CustomerID}</a>'
+           
         # create a CustomerID folder in the Customers folder
         cidFolder = output_dir + "/"+CustomerID
         # check to see if this CustomerID was already caught
         tempcount=0
-        extraString = ""
+        # temp fix for duplicate customerIDs
         while os.path.exists(cidFolder + extraString):
             tempcount+=1
-            extraString = "AND"+str(tempcount)
+            extraString = "_"+str(tempcount)
             # temporary solution
         CustomerID=CustomerID+extraString
         cidFolder = output_dir + "/"+CustomerID
@@ -145,7 +167,7 @@ if True:
         # create a CustomerID.html file in that CustomerID folder
         cid_html_name = CustomerID+".html"
         cid_html_path = cidFolder + "/" + cid_html_name
-        cid_html_content= f"<!DOCTYPE html>\n<html>\n<head>\n<title>{CustomerID}</title>\n</head>\n<body>\n<h2>{CustomerID}</h2>\n<h3>{CustomerName}</h3>\n<ul>\n"
+        cid_html_content= f"<!DOCTYPE html>\n<html>\n<head>\n<title>{CustomerID}</title>\n</head>\n<body>\n{tString}<h2>{CustomerID}</h2>\n<h3>{CustomerName}</h3>\n<ul>\n"
         
         # iterate through the row of the CustomerID in the xlsx
         for col in range(P_ID_START_COL, P_ID_END_COL):
@@ -154,7 +176,7 @@ if True:
                 break
             PoolID = PoolID.strip()
             PoolName = worksheet.cell(row=row+1, column=col).value
-            print(f"   {PoolID}: {PoolName}")
+            #print(f"   {PoolID}: {PoolName}") #debug
             # for each PoolID
             # create a PoolID folder in the CustomerID folder
             pidFolder = cidFolder+"/"+PoolID
@@ -192,7 +214,7 @@ if True:
                         pid_html_content += f'    <li><a target="_blank" href="{fileName}">{fileName}</a></li>\n'
                         
                     except IndexError as e:
-                        # print(f"{e}") # debug
+                        print(f"{e}") # debug
                         break
                     except Exception as e:
                         print(style.RED + f"!--ERROR:{e}" + style.RESET)
@@ -215,10 +237,37 @@ if True:
         
         # print(f" {cid_html_name} has been generated.") # debug
         
+        
         # add a link to AllCustomers.html that leads to CustomerID.html
         all_cids_html_content += f'    <li><a target="bottom" href="{CustomerID}/{cid_html_name}">{CustomerID}</a> {CustomerName}</li>\n'
-
-
+    
+    print(f"ArrayT_ID: {ArrayT_ID}")
+    for num in range(0,len(ArrayT_ID)):
+        # Create CustomerID.html in Customers Folder
+        CustomerID = ArrayT_ID[num]
+        tid_html_name = CustomerID +".html"
+        tid_html_path = output_dir + "/" + CustomerID + "/" + tid_html_name
+        tid_html_content= f"<!DOCTYPE html>\n<html>\n<head>\n<title>{CustomerID}</title>\n</head>\n<body>\n<h2>{CustomerID}</h2>\n<h3>Locations:</h3>\n<ul>\n"
+        
+        print(f"\n ArrayT_ID: {ArrayT_ID[num]}")
+        
+        for num2 in range(0,len(tripleArray[num])):
+            # print(f"\t {tripleArray[num][num2]}")
+            tempID = CustomerID+"_"+str(num2+1)
+            tempstring = f'    <li><a target="bottom" href="../{tempID}/{tempID}.html">{tempID}</a> {tripleArray[num][num2]}</li>\n'
+            # print(f"tempstring: {tempstring}") #debug
+            tid_html_content += tempstring
+        tid_html_content += "</ul>\n</body>\n</html>"
+        with open(tid_html_path, "w") as file:
+            file.write(tid_html_content)
+        
+    ##iterate through triple array
+    ##creating an html_content_string for each element in the top array
+        ##populating each html_content_string with each element inside
+    ##saving each content string as an html file in customers folder
+    
+    
+    
     # save AllCustomers.html in Customers Folder
     all_cids_html_content += "</ul>\n</body>\n</html>"
     with open(all_cids_html_path, "w") as file:
