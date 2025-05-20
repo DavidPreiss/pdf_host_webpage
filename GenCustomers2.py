@@ -17,8 +17,9 @@
 
 ### Intro
 """
-# This file iterates through an xlsx file to navigate the dumpfolder
-# To find pool pdfs and organize them in a folder structure
+# This file iterates through an xlsx file (CUSTOMERS_POOLS_XLSX)
+# to navigate the dumpfolder (DUMP_FOLDER_PATH)
+# To find pool pdfs and organize them into a folder structure
 # and then generate html files that navigate that structure
 # refer to the pseudocode for details
 """
@@ -71,7 +72,7 @@ if True:
 
 # Open CustomersPools excel document
 
-#TODO Create AllCustomers.html in Customers Folder
+# Create AllCustomers.html in Customers Folder
 
 # iterate through the CustomerID column in the xlsx
 # for each CustomerID
@@ -88,9 +89,9 @@ if True:
             # save PoolID.html
         # add a link to the CustomerID.html that leads to PoolID.html
     # save CustomerID.html
-    #TODO add a link to AllCustomers.html that leads to CustomerID.html
+    # add a link to AllCustomers.html that leads to CustomerID.html
 
-#TODO save AllCustomers.html in Customers Folder
+# save AllCustomers.html in Customers Folder
 # close CustomersPools excel document
 """
 
@@ -116,9 +117,9 @@ if True:
     all_cids_html_path = output_dir + "/" + all_cids_html_name
     all_cids_html_content= f"<!DOCTYPE html>\n<html>\n<head>\n<title>All Customers</title>\n</head>\n<body>\n<h2>All Customers</h2>\n<ul>\n"
     
-    ##est Array of T_IDs
+    # est Array of T_IDs
     ArrayT_ID = []
-    ##est array of arrays of arrays of subT_ID, T_name
+    # est 2D Array of T_ID_num, T_name
     tripleArray = []
     # iterate through the CustomerID column in the xlsx
     for count in range(C_ID_START_ROW, C_ID_END_ROW):
@@ -128,37 +129,63 @@ if True:
             break #reached the end of CustomerIDs
         CustomerID = CustomerID.strip()
         CustomerName = worksheet.cell(row=row+1, column=C_ID_COL).value
-        #print(f"\n CustomerID: {CustomerID}")
-        #print(f"\n CustomerName: {CustomerName}")
+        print(f"\n CustomerID: {CustomerID}")
+        print(f" CustomerName: {CustomerName}")
         extraString = ""
         
-        ##if CustomerID starts with T
-            ##check if Array of T_IDs contains CustomerID
-                ##if not, add new T_ID to T_ID array and triple array
-            ##add numbered T_ID to triple array
+        
+        """
+        Special catch needs to happen for CustomerIDs that start with T
+        aka T_IDs
+        Because There's going to be multiple of them
+        There's already a loop that catches and renames duplicate CustomerIDs
+        but we need something that builds out a branch page for our T_IDs
+        Each actual numbered T_ID gets its own leaf page
+        with a link at the top that leads back to the branch page
+        """
+        
+        #blank string that gets populated in the following if statement
         tString = ""
+        
+        # if CustomerID starts with T
         if CustomerID[0]=='T':
-            print(f"Customer starts w 'T': {CustomerID}")
+            # check if Array of T_IDs contains CustomerID
             if CustomerID not in ArrayT_ID:
+                #if not, add new T_ID to T_ID array and tripleArray
                 ArrayT_ID.append(CustomerID)
                 tempArray = []
                 tripleArray.append(tempArray)
+                
+                # make a folder for the branch page
                 cidFolder = output_dir + "/"+CustomerID
                 os.makedirs(cidFolder, exist_ok=True)
+                # make a link to the branch page in the All Customers page
                 all_cids_html_content += f'    <li><a target="bottom" href="{CustomerID}/{CustomerID}.html">{CustomerID}</a> Branch Page</li>\n'
+            
+            # add numbered T_ID to triple array
             tripleArray[ArrayT_ID.index(CustomerID)].append(CustomerName)
+            
+            # make sure the non-numbered CustomerID is saved for the branch page
             extraString = "_1"
+            
+            # create a link back to the branch page at the top of the leaf page
             tString = f'<a target="bottom" href="../{CustomerID}/{CustomerID}.html">{CustomerID}</a>'
            
         # create a CustomerID folder in the Customers folder
         cidFolder = output_dir + "/"+CustomerID
+        
+        """
+        Some CustomerIDs are duplicate
+        Ideally this wouldn't happen,
+        but when it does it needs to be handled.
+        Here I just number them after an underscore
+        """
+        
         # check to see if this CustomerID was already caught
         tempcount=0
-        # temp fix for duplicate customerIDs
         while os.path.exists(cidFolder + extraString):
             tempcount+=1
             extraString = "_"+str(tempcount)
-            # temporary solution
         CustomerID=CustomerID+extraString
         cidFolder = output_dir + "/"+CustomerID
         os.makedirs(cidFolder, exist_ok=True)
@@ -176,7 +203,7 @@ if True:
                 break
             PoolID = PoolID.strip()
             PoolName = worksheet.cell(row=row+1, column=col).value
-            #print(f"   {PoolID}: {PoolName}") #debug
+            print(f"   {PoolID}: {PoolName}") #debug
             # for each PoolID
             # create a PoolID folder in the CustomerID folder
             pidFolder = cidFolder+"/"+PoolID
@@ -188,7 +215,7 @@ if True:
             pid_html_path = pidFolder + "/" + pid_html_name
             pid_html_content= f"<!DOCTYPE html>\n<html>\n<head>\n<title>{PoolID}</title>\n</head>\n<body>\n<h2>{PoolID}</h2>\n<h3>{PoolName}</h3>\n<ul>\n"
             # iterate through the PoolID folder in the dumpfile
-            Dump_Pool_ID_path = DUMP_FOLDER_PATH+"/"+str(PoolID)
+            Dump_Pool_ID_path = DUMP_FOLDER_PATH+"/P"+str(PoolID)
             if os.path.exists(Dump_Pool_ID_path):
                 fnames = os.listdir(Dump_Pool_ID_path)
                 for file in range(0,MAX_WEEKS):
@@ -204,9 +231,9 @@ if True:
                         
                         # Copy the file
                         try:
-                            # print(f"\t Copying from\t {src_path}\n\t to\t {dest_path}") # debug
+                            #print(f"\t Copying from\t {src_path}\n\t to\t {dest_path}") # debug
                             shutil.copy2(src_path, dest_path)
-                            # print(f"\t Copy Success: {fileName}") # debug
+                            print(f"\t Copy Success: {fileName}") # debug
                         except Exception as e:
                             print(f"\t Copy Failed!:{e}")
                         
@@ -214,7 +241,7 @@ if True:
                         pid_html_content += f'    <li><a target="_blank" href="{fileName}">{fileName}</a></li>\n'
                         
                     except IndexError as e:
-                        print(f"{e}") # debug
+                        # print(f"{e}") # debug
                         break
                     except Exception as e:
                         print(style.RED + f"!--ERROR:{e}" + style.RESET)
@@ -241,32 +268,35 @@ if True:
         # add a link to AllCustomers.html that leads to CustomerID.html
         all_cids_html_content += f'    <li><a target="bottom" href="{CustomerID}/{cid_html_name}">{CustomerID}</a> {CustomerName}</li>\n'
     
-    print(f"ArrayT_ID: {ArrayT_ID}")
+    
+    # Loop that Creates a Branch Page each cycle:
+    
     for num in range(0,len(ArrayT_ID)):
+        # This loop iterates through the Array of T_IDs,
+        # creating a branch page for each one
+        
         # Create CustomerID.html in Customers Folder
         CustomerID = ArrayT_ID[num]
         tid_html_name = CustomerID +".html"
         tid_html_path = output_dir + "/" + CustomerID + "/" + tid_html_name
         tid_html_content= f"<!DOCTYPE html>\n<html>\n<head>\n<title>{CustomerID}</title>\n</head>\n<body>\n<h2>{CustomerID}</h2>\n<h3>Locations:</h3>\n<ul>\n"
-        
-        print(f"\n ArrayT_ID: {ArrayT_ID[num]}")
-        
+            
+        # iterate through tripleArray
         for num2 in range(0,len(tripleArray[num])):
-            # print(f"\t {tripleArray[num][num2]}")
+            # This loop iterates through the array of Names
+            # that all share a T_ID
+            # creating a link in the branch page to each one
+            # they already exist and already link back to the branch page
+            
+            #populating each tid_html_content with each element inside
             tempID = CustomerID+"_"+str(num2+1)
             tempstring = f'    <li><a target="bottom" href="../{tempID}/{tempID}.html">{tempID}</a> {tripleArray[num][num2]}</li>\n'
-            # print(f"tempstring: {tempstring}") #debug
             tid_html_content += tempstring
+        
+        # Cap off and save the Branch Page as an html file in Customers folder
         tid_html_content += "</ul>\n</body>\n</html>"
         with open(tid_html_path, "w") as file:
             file.write(tid_html_content)
-        
-    ##iterate through triple array
-    ##creating an html_content_string for each element in the top array
-        ##populating each html_content_string with each element inside
-    ##saving each content string as an html file in customers folder
-    
-    
     
     # save AllCustomers.html in Customers Folder
     all_cids_html_content += "</ul>\n</body>\n</html>"
