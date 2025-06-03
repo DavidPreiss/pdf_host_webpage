@@ -201,7 +201,7 @@ if True:
             PoolID = worksheet.cell(row=row, column=col).value
             if PoolID is None:
                 break
-            PoolID = PoolID.strip()
+            PoolID = str(PoolID).strip()
             PoolName = worksheet.cell(row=row+1, column=col).value
             print(f"   {PoolID}: {PoolName}") #debug
             # for each PoolID
