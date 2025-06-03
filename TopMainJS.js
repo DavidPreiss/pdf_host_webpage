@@ -1,9 +1,6 @@
-let firstname = "firstname";
-let lastname = "lastname";
-
 function dispName()
 {
-    firstname = document.getElementById("userInput").value;
+    const firstname = document.getElementById("userInput").value.toUpperCase();
 	//const newURL = "./Users/User"+firstname+"/User"+firstname+".html";
 	const newURL = "./Customers/"+firstname+"/"+firstname+".html";
     document.getElementById("nameshower").innerHTML=newURL;
