@@ -8,6 +8,4 @@ function dispName()
 	const mylink = document.getElementById("namelink");
 	mylink.href = newURL
 	
-	const mylink2 = document.getElementById("embedded_pdf");
-	mylink2.href = newURL
 }
