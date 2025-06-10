@@ -28,6 +28,7 @@
 if True:
     import shutil
     import os
+    import calendar
     import subprocess
     # System call
     os.system("")
@@ -44,7 +45,15 @@ if True:
         WHITE = '\033[37m'
         UNDERLINE = '\033[4m'
         RESET = '\033[0m'
-
+    
+    try:
+        from datetime import datetime
+    except ImportError as e:
+        print(style.RED + f"!--ERROR:{e}\ndatetime is not installed. Installing..." + style.RESET)
+        subprocess.check_call(["pip", "install", "datetime"])
+        print("Installation complete. You can now run the script.")
+        # exit()
+        
     try:
         import openpyxl
     except ImportError as e:
@@ -54,6 +63,46 @@ if True:
         # exit()
 
 ### Function Definitions
+    def iterateStats(statsFolder_path):
+        
+        statsFile_path = statsFolder_path+"/"+"statsFile.xlsx"
+        if not os.path.exists(statsFolder_path):
+            print(f"creating statsFolder_path: '{statsFolder_path}'") # debug
+            os.makedirs(statsFolder_path)
+            from openpyxl import Workbook
+
+            # Create a workbook
+            statswb = Workbook()
+
+            # Get the active worksheet or create a new sheet
+            ws = statswb.active
+
+            ws.cell(1,1).value = "Program Name"
+            ws.cell(1,2).value = "Times Ran on this CPU"
+            ws.cell(1,3).value = "First Ran on this CPU"
+            ws.cell(1,4).value = "Last Ran on this CPU"
+            
+            ws.cell(3,1).value = "GenCustomers2.py"
+            ws.cell(3,2).value = 1
+            ws.cell(3,3).value = datetime.now()
+            ws.cell(3,4).value = datetime.now()
+            
+            # Save the workbook to a file
+            statswb.save(statsFile_path)
+            print(f"created: '{statsFile_path}'") # debug
+        else:
+            
+            statswb = openpyxl.load_workbook(statsFile_path)
+            ws = statswb.active
+            if ws.cell(3,2).value is None:
+                ws.cell(3,1).value = "GenCustomers2.py"
+                ws.cell(3,2).value = 1
+                ws.cell(3,3).value = datetime.now()
+            else:
+                ws.cell(3,2).value = ws.cell(3,2).value+1
+            ws.cell(3,4).value = datetime.now()
+            statswb.save(statsFile_path)
+        print("iterated stats")
 
 ### Hard-coded Global Values
 if True:
@@ -305,6 +354,8 @@ if True:
 
     # close CustomersPools excel document
     workbook.close()
+    
+    iterateStats(DUMP_FOLDER_PATH+"/statsFolder")
 
     # Prompt the user to press Enter before closing
     input(style.GREEN + "\n\t\t Press Enter to close..." + style.RESET)
