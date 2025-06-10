@@ -52,7 +52,6 @@ if True:
         print(style.RED + f"!--ERROR:{e}\ndatetime is not installed. Installing..." + style.RESET)
         subprocess.check_call(["pip", "install", "datetime"])
         print("Installation complete. You can now run the script.")
-        # exit()
         
     try:
         import openpyxl
@@ -60,9 +59,9 @@ if True:
         print(style.RED + f"!--ERROR:{e}\nopenpyxl is not installed. Installing..." + style.RESET)
         subprocess.check_call(["pip", "install", "openpyxl"])
         print("Installation complete. You can now run the script.")
-        # exit()
 
 ### Function Definitions
+if True:
     def iterateStats(statsFolder_path):
         
         statsFile_path = statsFolder_path+"/"+"statsFile.xlsx"
