@@ -27,7 +27,8 @@
 ### Hard-coded Global Values
 if True:
     MAX_WEEKS = 52
-    DUMP_FOLDER_PATH = "../BNRPools/print_populated_pools/Dump Folder"
+    DUMP_FOLDER_PATH = "../BNRPools/print_populated_pools/Dump Folder" # For David's Computer
+    # DUMP_FOLDER_PATH = "../../../Web Archive" # For Andre's Computer
     CUSTOMERS_POOLS_XLSX = "template.xlsx"
     C_ID_COL = 1
     C_ID_START_ROW = 1
