@@ -145,7 +145,11 @@ if True:
 
 ### Main Code
 if True:
-
+    
+    # Change working directory to the script's directory
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    os.chdir(script_dir)
+    
     # Open CustomersPools excel document
     workbook = openpyxl.load_workbook(CUSTOMERS_POOLS_XLSX)
     worksheet = workbook.active
