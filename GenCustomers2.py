@@ -7,10 +7,10 @@
 ### TABLE OF CONTENTS
 """
 # Intro
+# Hard-coded Global Values
 # Import Statements
 # Function Definitions
 # Pseudocode
-# Hard-coded Global Values
 # Main Code
 # Outro
 """
@@ -23,6 +23,17 @@
 # and then generate html files that navigate that structure
 # refer to the pseudocode for details
 """
+
+### Hard-coded Global Values
+if True:
+    MAX_WEEKS = 52
+    DUMP_FOLDER_PATH = "../BNRPools/print_populated_pools/Dump Folder"
+    CUSTOMERS_POOLS_XLSX = "template.xlsx"
+    C_ID_COL = 1
+    C_ID_START_ROW = 1
+    C_ID_END_ROW = 1000
+    P_ID_START_COL = 2
+    P_ID_END_COL = 1000
 
 ### Import Statements
 if True:
@@ -103,17 +114,6 @@ if True:
             statswb.save(statsFile_path)
         print("iterated stats")
 
-### Hard-coded Global Values
-if True:
-    MAX_WEEKS = 52
-    DUMP_FOLDER_PATH = "../BNRPools/print_populated_pools/Dump Folder"
-    CUSTOMERS_POOLS_XLSX = "template.xlsx"
-    C_ID_COL = 1
-    C_ID_START_ROW = 1
-    C_ID_END_ROW = 1000
-    P_ID_START_COL = 2
-    P_ID_END_COL = 1000
-    
 ### Pseudocode
 """
 # Create Customers Folder
