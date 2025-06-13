@@ -29,7 +29,7 @@ if True:
     MAX_WEEKS = 52
     DUMP_FOLDER_PATH = "../BNRPools/print_populated_pools/Dump Folder" # For David's Computer
     # DUMP_FOLDER_PATH = "../../../Web Archive" # For Andre's Computer
-    CUSTOMERS_POOLS_XLSX = "template.xlsx"
+    CUSTOMERS_POOLS_XLSX = "Customer Database.xlsx"
     C_ID_COL = 1
     C_ID_START_ROW = 1
     C_ID_END_ROW = 1000
