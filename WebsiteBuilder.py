@@ -28,7 +28,7 @@
 if True:
     MAX_WEEKS = 52
     DUMP_FOLDER_PATH = "../BNRPools/print_populated_pools/Dump Folder" # For David's Computer
-    # DUMP_FOLDER_PATH = "../../../Web Archive" # For Andre's Computer
+    # DUMP_FOLDER_PATH = "../../Web Archive" # For Andre's Computer
     CUSTOMERS_POOLS_XLSX = "Customer Database.xlsx"
     C_ID_COL = 1
     C_ID_START_ROW = 1
@@ -93,7 +93,7 @@ if True:
             ws.cell(1,3).value = "First Ran on this CPU"
             ws.cell(1,4).value = "Last Ran on this CPU"
             
-            ws.cell(3,1).value = "GenCustomers2.py"
+            ws.cell(3,1).value = "WebsiteBuilder.py"
             ws.cell(3,2).value = 1
             ws.cell(3,3).value = datetime.now()
             ws.cell(3,4).value = datetime.now()
@@ -106,7 +106,7 @@ if True:
             statswb = openpyxl.load_workbook(statsFile_path)
             ws = statswb.active
             if ws.cell(3,2).value is None:
-                ws.cell(3,1).value = "GenCustomers2.py"
+                ws.cell(3,1).value = "WebsiteBuilder.py"
                 ws.cell(3,2).value = 1
                 ws.cell(3,3).value = datetime.now()
             else:
