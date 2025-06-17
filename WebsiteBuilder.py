@@ -18,7 +18,7 @@
 ### Intro
 """
 # This file iterates through an xlsx file (CUSTOMERS_POOLS_XLSX)
-# to navigate the dumpfolder (DUMP_FOLDER_PATH)
+# to navigate the web archive (WEB_ARCHIVE_PATH)
 # To find pool pdfs and organize them into a folder structure
 # and then generate html files that navigate that structure
 # refer to the pseudocode for details
@@ -27,8 +27,7 @@
 ### Hard-coded Global Values
 if True:
     MAX_WEEKS = 52
-    DUMP_FOLDER_PATH = "../BNRPools/print_populated_pools/Dump Folder" # For David's Computer
-    # DUMP_FOLDER_PATH = "../../Web Archive" # For Andre's Computer
+    WEB_ARCHIVE_PATH = "../../Web Archive"
     CUSTOMERS_POOLS_XLSX = "Customer Database.xlsx"
     C_ID_COL = 1
     C_ID_START_ROW = 1
@@ -267,17 +266,17 @@ if True:
             pid_html_name = PoolID+".html"
             pid_html_path = pidFolder + "/" + pid_html_name
             pid_html_content= f"<!DOCTYPE html>\n<html>\n<head>\n<title>{PoolID}</title>\n</head>\n<body>\n<h2>{PoolID}</h2>\n<h3>{PoolName}</h3>\n<ul>\n"
-            # iterate through the PoolID folder in the dumpfile
-            Dump_Pool_ID_path = DUMP_FOLDER_PATH+"/P"+str(PoolID)
-            if os.path.exists(Dump_Pool_ID_path):
-                fnames = os.listdir(Dump_Pool_ID_path)
+            # iterate through the PoolID folder in the web archive
+            WebArchive_PoolID_path = WEB_ARCHIVE_PATH+"/P"+str(PoolID)
+            if os.path.exists(WebArchive_PoolID_path):
+                fnames = os.listdir(WebArchive_PoolID_path)
                 for file in range(0,MAX_WEEKS):
                     try:
                         fileName = os.path.basename(fnames[file])
                         # print(f"\t{fileName}") #debug
                         # import and rename the pdf into the PoolID folder
                         # Source path
-                        src_path = Dump_Pool_ID_path + "/" + fileName
+                        src_path = WebArchive_PoolID_path + "/" + fileName
 
                         # Destination path
                         dest_path = pidFolder+ "/" + fileName
@@ -359,7 +358,7 @@ if True:
     # close CustomersPools excel document
     workbook.close()
     
-    iterateStats(DUMP_FOLDER_PATH+"/statsFolder")
+    iterateStats(WEB_ARCHIVE_PATH+"/statsFolder")
 
     # Prompt the user to press Enter before closing
     input(style.GREEN + "\n\t\t Press Enter to close..." + style.RESET)
