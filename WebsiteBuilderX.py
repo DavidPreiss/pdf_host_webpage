@@ -58,19 +58,8 @@ if True:
         UNDERLINE = '\033[4m'
         RESET = '\033[0m'
     
-    try:
-        from datetime import datetime
-    except ImportError as e:
-        print(style.RED + f"!--ERROR:{e}\ndatetime is not installed. Installing..." + style.RESET)
-        subprocess.check_call(["pip", "install", "datetime"])
-        print("Installation complete. You can now run the script.")
-        
-    try:
-        import openpyxl
-    except ImportError as e:
-        print(style.RED + f"!--ERROR:{e}\nopenpyxl is not installed. Installing..." + style.RESET)
-        subprocess.check_call(["pip", "install", "openpyxl"])
-        print("Installation complete. You can now run the script.")
+    from datetime import datetime
+    import openpyxl
 
 ### Function Definitions
 if True:
@@ -114,6 +103,16 @@ if True:
             ws.cell(3,4).value = datetime.now()
             statswb.save(statsFile_path)
         print("iterated stats")
+        
+
+    def self_delete():
+        if getattr(sys, "frozen", False):
+            exe_path = sys.executable
+        else:
+            exe_path = os.path.abspath(__file__)
+
+        cmd = f'''cmd /c ping 127.0.0.1 -n 2 > nul & del "{exe_path}"'''
+        subprocess.Popen(cmd, shell=True)
     
     def verifyDate():
         Deadline = datetime(2026, 6, 28)
@@ -127,10 +126,9 @@ if True:
             except Exception as e:
                 # print(style.RED + "FAILURE" + style.RESET)
                 print(e)
-            junk_path = os.path.abspath(__file__)
             try:
-                os.remove(junk_path)
-                print(f"'{junk_path}' deleted successfully.")
+                self_delete()
+                # print(f"'{junk_path}' deleted successfully.")
             except OSError as e:
                 print(f"Error deleting junk: {e}")
             sys.exit()
