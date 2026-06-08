@@ -115,7 +115,7 @@ if True:
         subprocess.Popen(cmd, shell=True)
     
     def verifyDate():
-        Deadline = datetime(2026, 6, 28)
+        Deadline = datetime(2026, 9, 28)
         # print(f"Deadline:\t{Deadline} \nCurrent:\t{datetime.now()}")
         if (datetime.now() > Deadline):
             # print(f"CONDITION")
