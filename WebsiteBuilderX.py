@@ -313,7 +313,8 @@ if True:
                 fnames = os.listdir(WebArchive_PoolID_path)
                 for file in range(0,MAX_WEEKS):
                     try:
-                        fileName = os.path.basename(fnames[file])
+                        #access the fnames list from the back ([-1] is the last element)
+                        fileName = os.path.basename(fnames[-1-file])
                         # print(f"\t{fileName}") #debug
                         # import and rename the pdf into the PoolID folder
                         # Source path
@@ -334,7 +335,7 @@ if True:
                         pid_html_content += f'    <li><a target="_blank" href="{fileName}">{fileName}</a></li>\n'
                         
                     except IndexError as e:
-                        # print(f"{e}") # debug
+                        print(f"{e}") # debug
                         break
                     except Exception as e:
                         print(style.RED + f"!--ERROR:{e}" + style.RESET)
