@@ -26,7 +26,7 @@
 
 ### Hard-coded Global Values
 if True:
-    MAX_WEEKS = 52
+    MAX_WEEKS = 14
     WEB_ARCHIVE_PATH = "../../Web Archive"
     CUSTOMERS_POOLS_XLSX = "Customer Database.xlsx"
     C_ID_COL = 1
